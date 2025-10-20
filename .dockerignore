@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Pytest
+.pytest_cache/
+
+# Logs
+*.log
+
+# Distribution
+*.egg-info/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation (not needed in container)
+docs/
+REORGANIZATION_SUMMARY.md
+
+# Storage (mounted as volume)
+# storage/
+
+# Results (not needed in container runtime)
+results/
+
+# Tests (not needed in production container)
+# tests/

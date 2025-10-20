@@ -1,22 +1,37 @@
 version: '3.9'
+
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile.api
+    container_name: bd2-api
     ports:
       - '8000:8000'
     volumes:
-      - ./:/app
+      - ./storage:/app/storage  # Persist storage data
+      - ./data:/app/data        # Share dataset
     environment:
       - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
   ui:
     build:
       context: .
       dockerfile: Dockerfile.ui
+    container_name: bd2-ui
     ports:
       - '8501:8501'
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     volumes:
-      - ./:/app
+      - ./storage:/app/storage  # Share storage with API
+      - ./data:/app/data        # Share dataset
+    environment:
+      - PYTHONUNBUFFERED=1

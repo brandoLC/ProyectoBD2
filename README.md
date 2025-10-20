@@ -57,16 +57,32 @@ uvicorn api.main:app --reload --port 8000
 streamlit run ui/app.py --server.port 8501
 ```
 
-### Opción 2: Docker Compose
+### Opción 2: Docker Compose (Recomendado para Producción)
 
 ```bash
+# Clonar repositorio
+git clone https://github.com/brandoLC/ProyectoBD2.git
+cd ProyectoBD2
+
+# Levantar todo el sistema
 docker compose up --build
 ```
 
-**Endpoints:**
+**Primera ejecución (~5 minutos):**
+- 🏗️  Construye imágenes Docker
+- 🗄️  Carga automáticamente 9,551 registros en 4 tablas
+- ✅ Inicia API + UI
 
-- API FastAPI: http://localhost:8000/docs
-- UI Streamlit: http://localhost:8501
+**Ejecuciones subsecuentes (~15 segundos):**
+- ⚡ Usa datos ya cargados
+- ⚡ Inicia directo
+
+**Endpoints:**
+- 🎨 UI Streamlit: http://localhost:8501
+- 📡 API FastAPI: http://localhost:8000/docs
+- ❤️  Health Check: http://localhost:8000/health
+
+**Más detalles:** Ver [`DOCKER_GUIDE.md`](DOCKER_GUIDE.md)
 
 ## 📊 Resultados de Benchmark (100 registros)
 
