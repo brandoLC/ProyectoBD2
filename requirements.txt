@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+streamlit
+pydantic>=2.0
+requests
+typing_extensions

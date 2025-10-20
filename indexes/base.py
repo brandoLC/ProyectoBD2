@@ -1,0 +1,16 @@
+from __future__ import annotations
+from typing import Any, Dict, List, Protocol
+
+class IIndex(Protocol):
+    key: str
+
+    def add(self, row: Dict[str, Any]) -> None: ...
+    def search(self, value: Any) -> List[Dict[str, Any]]: ...
+    def clear(self) -> None: ...
+    
+    # Persistencia
+    def save(self, filepath: str) -> None: ...
+
+    # opcional para índices que soportan rango
+    def range_search(self, lo: Any, hi: Any) -> List[Dict[str, Any]]: ...
+

@@ -1,0 +1,5 @@
+index_type,table_name,select_eq_ms,select_eq_reads,select_eq_found,range_10_ms,range_10_reads,range_10_found,range_100_ms,range_100_reads,range_100_found,range_1000_ms,range_1000_reads,range_1000_found,insert_ms,insert_writes,delete_ms,delete_reads,delete_writes,deleted_count
+Sequential,restaurants_seq,7.11,1.0,3,2.07,1,2,1.98,1,2,2.08,1,3,1.69,1,375.07,449,0,1
+ISAM,restaurants_isam,7.38,1.0,3,1.03,1,2,0.91,1,2,0.77,1,3,0.68,1,1.13,1,0,1
+ExtHash,restaurants_hash,7.41,1.0,3,0.99,1,2,1.06,1,2,0.93,1,3,2.49,1,383.7,449,0,1
+BPlusTree,restaurants_bplustree,0.78,0.0,3,2.09,0,2,0.85,0,2,0.69,0,3,0.0,0,1.61,0,0,1

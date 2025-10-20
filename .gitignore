@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Storage files (datos persistentes)
+storage/
+storage_test/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Pytest
+.pytest_cache/
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Distribution
+*.egg-info/
+dist/
+build/
+
+# Scripts temporales (opcional - descomentar si no quieres subirlos)
+# analyze_obsolete.py
+# safe_cleanup.py
