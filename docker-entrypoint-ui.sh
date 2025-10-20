@@ -1,8 +1,6 @@
 #!/bin/bash
-"""
-Entrypoint script for UI container
-Waits for API to be ready, then starts Streamlit
-"""
+# Entrypoint script for UI container
+# Waits for API to be ready, then starts Streamlit
 set -e
 
 echo "🎨 Starting UI container..."

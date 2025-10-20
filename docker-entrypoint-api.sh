@@ -1,8 +1,6 @@
 #!/bin/bash
-"""
-Entrypoint script for API container
-Initializes database if needed, then starts the API
-"""
+# Entrypoint script for API container
+# Initializes database if needed, then starts the API
 set -e
 
 echo "🔧 Starting API container..."
