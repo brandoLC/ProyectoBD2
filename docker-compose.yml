@@ -9,16 +9,17 @@ services:
     ports:
       - '8000:8000'
     volumes:
-      - ./storage:/app/storage  # Persist storage data
-      - ./data:/app/data        # Share dataset
+      - ./storage:/app/storage # Persist storage data
+      - ./data:/app/data # Share dataset
     environment:
       - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
+      test: ['CMD', 'curl', '-f', 'http://localhost:8000/health']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 60s
 
   ui:
     build:
@@ -31,7 +32,8 @@ services:
       api:
         condition: service_healthy
     volumes:
-      - ./storage:/app/storage  # Share storage with API
-      - ./data:/app/data        # Share dataset
+      - ./storage:/app/storage # Share storage with API
+      - ./data:/app/data # Share dataset
     environment:
       - PYTHONUNBUFFERED=1
+      - PYTHONPATH=/app

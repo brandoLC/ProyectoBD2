@@ -8,6 +8,9 @@ echo "🎨 Starting UI container..."
 # Change to app directory
 cd /app
 
+# Set PYTHONPATH so Python can find the modules
+export PYTHONPATH=/app:$PYTHONPATH
+
 # Wait for API to be ready
 echo "⏳ Waiting for API to be ready..."
 until curl -s http://api:8000/health > /dev/null 2>&1; do

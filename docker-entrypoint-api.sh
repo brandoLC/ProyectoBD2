@@ -8,6 +8,9 @@ echo "🔧 Starting API container..."
 # Change to app directory
 cd /app
 
+# Set PYTHONPATH so Python can find the modules
+export PYTHONPATH=/app:$PYTHONPATH
+
 # Initialize database if needed
 echo "📊 Checking database initialization..."
 python scripts/init_docker.py
