@@ -5,6 +5,7 @@ Esta guía explica cómo ejecutar el proyecto completo usando Docker Compose.
 ## 📋 Prerrequisitos
 
 - **Docker Desktop** instalado y corriendo
+
   - Windows: [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
   - Mac: [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
   - Linux: [Install Docker Engine](https://docs.docker.com/engine/install/)
@@ -28,11 +29,10 @@ docker compose up --build
 
 **¿Qué sucede internamente?**
 
-1. 🏗️  **Build** (primera vez: ~2-3 minutos)
+1. 🏗️ **Build** (primera vez: ~2-3 minutos)
    - Construye imagen del API (FastAPI)
    - Construye imagen de la UI (Streamlit)
-   
-2. 🗄️  **Inicialización de datos** (primera vez: ~2-3 minutos)
+2. 🗄️ **Inicialización de datos** (primera vez: ~2-3 minutos)
    - Detecta que `storage/` está vacío
    - Ejecuta `scripts/load_all_9k.py` automáticamente
    - Carga 9,551 registros en 4 tablas:
@@ -40,7 +40,6 @@ docker compose up --build
      - `restaurants_isam` (ISAM 3-level)
      - `restaurants_hash` (Extendible Hash)
      - `restaurants_bplustree` (B+ Tree)
-   
 3. ✅ **Inicio de servicios**
    - API corriendo en `http://localhost:8000`
    - UI corriendo en `http://localhost:8501`
@@ -74,21 +73,25 @@ docker compose up
 ## 🔧 Comandos Útiles
 
 ### Ver logs en tiempo real
+
 ```bash
 docker compose logs -f
 ```
 
 ### Ver logs solo del API
+
 ```bash
 docker compose logs -f api
 ```
 
 ### Ver logs solo de la UI
+
 ```bash
 docker compose logs -f ui
 ```
 
 ### Reconstruir desde cero
+
 ```bash
 docker compose down
 docker compose build --no-cache
@@ -96,6 +99,7 @@ docker compose up
 ```
 
 ### Limpiar datos y empezar de nuevo
+
 ```bash
 # Detener contenedores
 docker compose down
@@ -124,6 +128,7 @@ ProyectoBD2/
 ```
 
 **Ventajas:**
+
 - ✅ Los datos sobreviven a `docker compose down`
 - ✅ No hay que recargar los datos cada vez
 - ✅ Puedes inspeccionar los archivos directamente
@@ -131,6 +136,7 @@ ProyectoBD2/
 ## 🐛 Troubleshooting
 
 ### Puerto 8000 ya está en uso
+
 ```bash
 # Cambiar puerto en docker-compose.yml:
 ports:
@@ -138,6 +144,7 @@ ports:
 ```
 
 ### Puerto 8501 ya está en uso
+
 ```bash
 # Cambiar puerto en docker-compose.yml:
 ports:
@@ -145,6 +152,7 @@ ports:
 ```
 
 ### Los datos no se cargan
+
 ```bash
 # Verificar que data/ tiene el CSV
 ls data/kaggle_Dataset\ .csv
@@ -156,6 +164,7 @@ docker compose up --build
 ```
 
 ### Error de permisos en Linux
+
 ```bash
 # Dar permisos a los scripts
 chmod +x docker-entrypoint-api.sh
@@ -163,6 +172,7 @@ chmod +x docker-entrypoint-ui.sh
 ```
 
 ### Ver qué está pasando dentro del contenedor
+
 ```bash
 # Entrar al contenedor del API
 docker exec -it bd2-api bash
@@ -179,11 +189,13 @@ python scripts/load_all_9k.py  # Recargar manualmente
 ## 📈 Performance
 
 ### Primera ejecución
+
 - **Build**: ~2-3 minutos (descarga Python, instala dependencias)
 - **Carga de datos**: ~2-3 minutos (9,551 registros × 4 tablas)
 - **Total**: ~5-6 minutos
 
 ### Ejecuciones subsecuentes
+
 - **Inicio**: ~10-15 segundos
 - **Total**: ~10-15 segundos ⚡
 

@@ -25,13 +25,13 @@ class Catalog:
                     key=schema_data["key"],
                     columns=columns
                 )
-                # Crear tabla con el índice especificado y reconstruir índices
+                # Crear tabla con el índice especificado (sin cargar/reconstruir índices)
                 index_type = metadata.get("index_type", "sequential")
                 self.tables[table_name] = Table(
                     schema=schema, 
                     storage=self.storage, 
                     index_type=index_type,
-                    rebuild_indexes=True  # Reconstruir índices desde disco
+                    rebuild_indexes=False  # NO cargar/reconstruir - las tablas se cargan desde UI
                 )
 
     def ensure(self, name: str, key: str, columns: List[str]) -> Table:

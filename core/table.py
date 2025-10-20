@@ -51,27 +51,38 @@ class Table:
         
         # Intentar cargar índices desde disco
         for col_name, idx in list(self.indexes.items()):
-            index_filename = f"{self.name}_{type(idx).__name__.lower().replace('index', '')}.idx"
+            # Formato real de archivos: restaurants_isam_isam, restaurants_bplustree_bplustree, etc.
+            index_type = type(idx).__name__.lower().replace('index', '')
+            index_base = f"{self.name}_{index_type}_{index_type}"  # Duplicado porque los índices guardan con este formato
+            
             # Usar pathlib para construcción de paths multi-plataforma
             from pathlib import Path
-            index_path = Path(self.storage.data_dir) / index_filename
+            index_path = Path(self.storage.data_dir) / index_base
             
-            # Para ISAM multinivel, buscar archivo L2 que es el punto de entrada
-            index_exists = index_path.exists()
-            if not index_exists and 'isam' in index_filename.lower():
-                # Intentar con formato multinivel (_l2.idx)
-                index_path_l2 = Path(self.storage.data_dir) / index_filename.replace('.idx', '_l2.idx')
-                if index_path_l2.exists():
-                    index_path = Path(str(index_path).replace('.idx', ''))  # Base path sin .idx
-                    index_exists = True  # Marcar como existente
+            # Para ISAM, verificar si existe el archivo L2 (multinivel)
+            index_exists = False
+            if index_type == 'isam':
+                index_path_l2 = Path(self.storage.data_dir) / f"{index_base}_l2.idx"
+                index_exists = index_path_l2.exists()
+            elif index_type == 'sequential':
+                # Sequential guarda como restaurants_seq_sequential (sin extensión)
+                index_exists = index_path.exists()
+            elif index_type in ['extendiblehash', 'bplustree']:
+                # Estos también guardan sin extensión
+                index_exists = index_path.exists()
             
             if index_exists:
                 # Cargar índice desde disco
                 try:
-                    loaded_idx = type(idx).load(str(index_path))
+                    # Para ISAM, pasar el path base (el método load() agregará _l2.idx internamente)
+                    # Para otros índices, pasar el path completo
+                    load_path = str(index_path)
+                    loaded_idx = type(idx).load(load_path)
                     self.indexes[col_name] = loaded_idx
+                    print(f"✅ Loaded {index_type} index from {load_path}")
                 except Exception as e:
-                    print(f"Warning: Failed to load index from {index_path}: {e}")
+                    print(f"⚠️  Warning: Failed to load index from {index_path}: {e}")
+                    print(f"   Rebuilding index from data...")
                     # Fallback: reconstruir desde datos
                     all_rows = self.storage.read_all(self.name)
                     for row in all_rows:

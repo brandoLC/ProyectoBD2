@@ -69,18 +69,21 @@ docker compose up --build
 ```
 
 **Primera ejecución (~5 minutos):**
-- 🏗️  Construye imágenes Docker
-- 🗄️  Carga automáticamente 9,551 registros en 4 tablas
+
+- 🏗️ Construye imágenes Docker
+- 🗄️ Carga automáticamente 9,551 registros en 4 tablas
 - ✅ Inicia API + UI
 
 **Ejecuciones subsecuentes (~15 segundos):**
+
 - ⚡ Usa datos ya cargados
 - ⚡ Inicia directo
 
 **Endpoints:**
+
 - 🎨 UI Streamlit: http://localhost:8501
 - 📡 API FastAPI: http://localhost:8000/docs
-- ❤️  Health Check: http://localhost:8000/health
+- ❤️ Health Check: http://localhost:8000/health
 
 **Más detalles:** Ver [`DOCKER_GUIDE.md`](DOCKER_GUIDE.md)
 
@@ -297,9 +300,10 @@ python scripts/visualize_benchmark.py
 ```
 
 Ver resultados en la carpeta `results/`
-python init_kaggle_db.py  # Modificar para usar kaggle_Dataset.csv
+python init_kaggle_db.py # Modificar para usar kaggle_Dataset.csv
 python benchmark_comparison.py
-```
+
+````
 
 ## 🐛 Troubleshooting
 
@@ -308,7 +312,7 @@ python benchmark_comparison.py
 ```bash
 python clean_storage.py
 python init_kaggle_db.py
-```
+````
 
 ### Error: "Key not found"
 

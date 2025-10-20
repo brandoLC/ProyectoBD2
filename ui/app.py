@@ -3,13 +3,15 @@ import requests
 import pandas as pd
 import time
 import json
+import os
 from datetime import datetime
 
 # ============================================================================
 # CONFIGURACIÓN
 # ============================================================================
 
-API_URL = "http://localhost:8000"
+# Use environment variable for API URL (defaults to localhost for local dev)
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 st.set_page_config(
     page_title="BD2 Database Manager",

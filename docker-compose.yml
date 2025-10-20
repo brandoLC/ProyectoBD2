@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   api:
     build:
@@ -16,10 +14,10 @@ services:
       - PYTHONPATH=/app
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:8000/health']
-      interval: 5s
-      timeout: 3s
-      retries: 10
-      start_period: 60s
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 90s
 
   ui:
     build:
@@ -29,11 +27,11 @@ services:
     ports:
       - '8501:8501'
     depends_on:
-      api:
-        condition: service_healthy
+      - api
     volumes:
       - ./storage:/app/storage # Share storage with API
       - ./data:/app/data # Share dataset
     environment:
       - PYTHONUNBUFFERED=1
       - PYTHONPATH=/app
+      - API_URL=http://api:8000
