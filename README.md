@@ -47,8 +47,8 @@ python -m venv .venv
 # Instalar dependencias
 pip install -r requirements.txt
 
-# Inicializar base de datos (Kaggle dataset - 100 registros)
-python init_kaggle_db.py
+# Inicializar base de datos (Kaggle dataset - 9.5K registros)
+python scripts/load_all_9k.py
 
 # Ejecutar Backend API (terminal 1)
 uvicorn api.main:app --reload --port 8000
@@ -88,13 +88,12 @@ docker compose up --build
 
 ### 1. Cargar Datos desde CSV
 
-```python
-# Cargar dataset de Kaggle (100 registros)
-python init_kaggle_db.py
+```bash
+# Cargar dataset completo de Kaggle (9,551 registros) en las 4 tablas
+python scripts/load_all_9k.py
 
-# O datasets más grandes:
-# - kaggle_Dataset_1k.csv (1,000 registros)
-# - kaggle_Dataset.csv (9,300 registros)
+# Limpiar storage si necesitas empezar de cero
+python scripts/clean_storage.py
 ```
 
 ### 2. Ejecutar Consultas SQL
@@ -127,10 +126,14 @@ print(f"Eliminados: {result['deleted']} registros")
 ### 3. Benchmark de Comparación
 
 ```bash
-python benchmark_comparison.py
+# Ejecutar benchmark completo con 9.5K registros
+python scripts/benchmark_9k.py
+
+# Generar gráficos de visualización
+python scripts/visualize_benchmark.py
 ```
 
-Genera tabla comparativa y CSV con resultados:
+Genera tabla comparativa y CSV con resultados (guardados en `results/`):
 
 ```
 Benchmark Results (100 records)
@@ -145,7 +148,7 @@ SELECT=      13ms (2R)     12ms (5R)      45ms (3R)      15ms (4R)
 ### 4. Limpiar Storage
 
 ```bash
-python clean_storage.py
+python scripts/clean_storage.py
 ```
 
 Elimina todos los archivos `.dat`, `.idx` y reinicia `catalog.json`.
@@ -156,35 +159,49 @@ Elimina todos los archivos `.dat`, `.idx` y reinicia `catalog.json`.
 
 ```
 Proyecto/
-├── core/              # Core engine
+├── core/                   # Core engine
 │   ├── disk_manager.py      # Gestión de páginas en disco
 │   ├── buffer_pool.py       # Buffer pool con LRU
 │   ├── io_metrics.py        # Contador de I/O
 │   ├── table.py             # Abstracción de tabla
 │   └── schema.py            # Definición de esquema
-├── indexes/           # Índices implementados
+├── indexes/                # Índices implementados
 │   ├── sequential.py        # Sequential File con bloques
 │   ├── isam.py             # ISAM 3-level + overflow
 │   ├── ext_hash.py         # Extendible Hash dinámico
 │   └── bplustree.py        # B+ Tree balanceado
-├── sql/               # Motor SQL
+├── sql/                    # Motor SQL
 │   ├── parser.py           # Parser SQL → AST
 │   ├── planner.py          # Query planner
 │   └── executor.py         # Executor con métricas
-├── api/               # FastAPI backend
+├── api/                    # FastAPI backend
 │   └── main.py             # Endpoints REST
-├── ui/                # Streamlit frontend
+├── ui/                     # Streamlit frontend
 │   └── app.py              # Interfaz interactiva
-├── storage/           # Archivos de datos persistentes
+├── scripts/                # Scripts de utilidad
+│   ├── load_all_9k.py      # Cargar dataset completo
+│   ├── benchmark_9k.py     # Benchmark con 9.5K registros
+│   ├── visualize_benchmark.py  # Generar gráficos
+│   └── clean_storage.py    # Limpiar storage
+├── results/                # Resultados de benchmarks
+│   ├── benchmark_9k_results_*.csv  # Resultados en CSV
+│   └── *.png               # Gráficos de comparación
+├── tests/                  # Tests unitarios
+│   ├── test_indexes_basic.py   # Tests básicos de índices
+│   ├── test_delete_real_io.py  # Tests de DELETE con I/O
+│   └── test_delete_sql.py      # Tests de DELETE SQL
+├── docs/                   # Documentación adicional
+│   ├── GUIA_USO.md         # Guía de uso detallada
+│   ├── QUERIES_KAGGLE.md   # Ejemplos de queries
+│   └── TESTING_GUIDE.md    # Guía de testing
+├── storage/                # Archivos de datos persistentes
 │   ├── *.dat               # Archivos de datos de tablas
 │   ├── *_buckets.dat       # Buckets de ISAM/Hash
 │   ├── *_l1.idx            # Índice L1 de ISAM
 │   ├── *_l2.idx            # Índice L2 de ISAM
 │   └── catalog.json        # Catálogo de tablas
-└── data/              # Datasets CSV
-    ├── kaggle_Dataset_100.csv   # 100 registros
-    ├── kaggle_Dataset_1k.csv    # 1K registros
-    └── kaggle_Dataset.csv       # 9K registros
+└── data/                   # Datasets CSV
+    └── kaggle_Dataset .csv # Dataset completo (9.5K registros)
 ```
 
 ### Flujo de una Consulta
@@ -241,23 +258,29 @@ Usuario (SQL) → Parser → AST → Planner → Executor
 
 ```bash
 # Test DELETE en los 4 índices
-python test_delete_sql.py
+python tests/test_delete_sql.py
 
 # Test de I/O real con DELETE
-python test_delete_real_io.py
+python tests/test_delete_real_io.py
 
 # Tests básicos de índices
-pytest tests/test_indexes_basic.py
+pytest tests/test_indexes_basic.py -v
 ```
 
-## 📈 Benchmark con Datasets Grandes
+## 📈 Benchmark con Dataset Completo
 
 ```bash
-# 1K registros
-python init_kaggle_db.py  # Modificar para usar kaggle_Dataset_1k.csv
-python benchmark_comparison.py
+# Cargar datos (9,551 registros)
+python scripts/load_all_9k.py
 
-# 9K registros (full dataset)
+# Ejecutar benchmark
+python scripts/benchmark_9k.py
+
+# Generar gráficos
+python scripts/visualize_benchmark.py
+```
+
+Ver resultados en la carpeta `results/`
 python init_kaggle_db.py  # Modificar para usar kaggle_Dataset.csv
 python benchmark_comparison.py
 ```
